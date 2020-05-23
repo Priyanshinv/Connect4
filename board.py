@@ -125,16 +125,16 @@ class Board:
 
     def _check_winner(self):
         # check each row and column
-        for c in range(0,6):
-            for r in range(0,4):
+        for c in range(0,7):
+            for r in range(0,2):
                 if self.state[r][c] > 0 and self.state[r][c]!=3 and self.state[r][c] == self.state[r+1][c] and self.state[r][c] == self.state[r+2][c] and self.state[r][c] == self.state[r+3][c]:
                     return X_WIN if self.state[r][c] == 1 else O_WIN
         for c in range(0,3):
-            for r in range(0,7):
+            for r in range(0,6):
                 if self.state[r][c] > 0 and self.state[r][c]!=3 and self.state[r][c] == self.state[r][c+1] and self.state[r][c] == self.state[r][c+2] and self.state[r][c] == self.state[r][c+3]:
                     return X_WIN if self.state[r][c] == 1 else O_WIN
         for c in range(0,3):
-            for r in range(0,4):
+            for r in range(0,2):
                 if self.state[r][c] > 0 and self.state[r][c]!=3 and self.state[r][c] == self.state[r+1][c+1] and self.state[r][c] == self.state[r+2][c+2] and self.state[r][c] == self.state[r+3][c+3]:
                     return X_WIN if self.state[r][c] == 1 else O_WIN
         for c in range(0,3):
@@ -143,10 +143,11 @@ class Board:
                     return X_WIN if self.state[r][c] == 1 else O_WIN
         # draw
         count = 0
-        for r in range(0,7):
-            for c in range(0,6):
-                if self.state[r][c]==0:
+        for r in range(0,6):
+            for c in range(0,7):
+                if self.state[r][c] == 0:
                     count=count+1
+        print(count)
         if count == 0:
             return DRAW
         return ONGOING
