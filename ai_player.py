@@ -34,6 +34,7 @@ class AIPlayer():
         if board.game_over():
             return
         row, col, value = self._minimax(board, 5, -math.inf, math.inf, True)
+        print(value)
         return board.move(row, col, self.side)
     
     def _winning_move(self,board, piece):
@@ -114,6 +115,64 @@ class AIPlayer():
                         count=count+1
             return count
         
+    def _count_coins(self, board, number, piece):
+        board_copy = board.board_copy()
+        count = 0
+        if number == 4:
+            for c in range(0,7):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,6):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(3,ROW_SIZE):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count+1
+            return count
+        if number == 3:
+            for c in range(0,7):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,6):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(3,ROW_SIZE):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2]:
+                        count=count+1
+            return count
+        else:
+            for c in range(0,7):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,6):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1]:
+                        count=count+1
+            for c in range(0,3):
+                for r in range(3,ROW_SIZE):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1]:
+                        count=count+1
+            return count        
+        
             
     def _deep_copy(self,board):
         board_copy = board.board_copy()
@@ -123,13 +182,13 @@ class AIPlayer():
         placements = self._select_best_move(board)
         #is_terminal = self._is_terminal_node(board,placements)
         if self._winning_move(board, self.side):
-            return (None, None, self._count_consecutives(board,4, self.side)*100000 + self._count_consecutives(board,3, self.side)*100 + self._count_consecutives(board,2, self.side))
+            return (None, None, self._count_consecutives(board,4, self.side)*100 + self._count_consecutives(board,3, self.side)*20 + self._count_consecutives(board,2, self.side) - self._count_consecutives(board,4, 3-self.side)*500 - self._count_consecutives(board,3, self.side)*200 - self._count_consecutives(board,2, self.side)*50)
         if self._winning_move(board, 3-self.side):
-            return (None, None, -100000)
+            return (None, None, -500)
         if len(placements) == 0:
             return (None, None, 0)
         if depth == 0:
-            return (None, None, self._count_consecutives(board, 3, self.side)*100 + self._count_consecutives(board, 2, self.side))
+            return (None, None, self._count_consecutives(board,4, self.side)*100 + self._count_consecutives(board, 3, self.side)*20 + self._count_consecutives(board, 2, self.side)- self._count_consecutives(board,4, 3-self.side)*500 - self._count_consecutives(board,3, self.side)*200 - self._count_consecutives(board,2, self.side)*50)
         if maximizingPlayer:
             value = -math.inf
             row_temp, column_temp = random.choice(placements)
@@ -160,7 +219,7 @@ class AIPlayer():
                     column_temp = col
                 beta = min(beta,value)
                 if alpha>=beta:
-                    break;
+                    break
             return row_temp, column_temp, value
             
             
