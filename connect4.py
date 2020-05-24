@@ -11,7 +11,7 @@ sys.path.insert(1, str(Path.cwd()))
 
 from board import Board
 from random_player import RandomPlayer
-#from AIPlayer import AIPlayer
+from ai_player import AIPlayer
 
 
 PLAYER_X = 1
@@ -75,8 +75,8 @@ if __name__ == "__main__":
 
     # test: play 1000 games against each opponent
     print('Playing QLearner against RandomPlayer for 10 times......')
-    q_rand = battle(board, RandomPlayer(), RandomPlayer(), 50)
-    rand_q = battle(board, RandomPlayer(), RandomPlayer(), 50)
+    q_rand = battle(board, RandomPlayer(), AIPlayer(), 50)
+    rand_q = battle(board, AIPlayer(), RandomPlayer(), 50)
     #print('Playing QLearner against SmartPlayer for 1000 times......')
     #q_smart = battle(board, qlearner, SmartPlayer(), 500)
     #smart_q = battle(board, SmartPlayer(), qlearner, 500)
