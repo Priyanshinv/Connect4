@@ -75,8 +75,8 @@ if __name__ == "__main__":
 
     # test: play 1000 games against each opponent
     print('Playing QLearner against RandomPlayer for 10 times......')
-    q_rand = battle(board, AIPlayer(), RandomPlayer(), 50)
-    rand_q = battle(board, RandomPlayer(), AIPlayer(), 50)
+    q_rand = battle(board, AIPlayer(), RandomPlayer(), 5)
+    rand_q = battle(board, RandomPlayer(), AIPlayer(), 5)
     #print('Playing QLearner against SmartPlayer for 1000 times......')
     #q_smart = battle(board, qlearner, SmartPlayer(), 500)
     #smart_q = battle(board, SmartPlayer(), qlearner, 500)

@@ -39,7 +39,7 @@ class AIPlayer():
         """
         if board.game_over():
             return
-        row, col, value = self._minimax(board, 5, -math.inf, math.inf, True)
+        row, col, value = self._minimax(1,board, 5, self.side,-math.inf, math.inf, True)
         print(value)
         return board.move(row, col, self.side)
     
@@ -75,6 +75,111 @@ class AIPlayer():
                 if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
                     return True
         return False
+    
+    def _consecutives_with_spaces(self,board,number,piece):
+        board_copy = board.board_copy()
+        opp = 3 - piece
+        count = 0
+        if number == 3:
+            for c in range(0,7):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count+10
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count+10
+                    if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count-30
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count-30
+            for c in range(0,3):
+                for r in range(0,6):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count-30
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count-30
+            for c in range(0,3):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count-30
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count-30
+            for c in range(0,3):
+                for r in range(3,ROW_SIZE):
+                    if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count+10
+                    if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count-30
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count-30
+            return count
+        else:
+            for c in range(0,7):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count+3
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == 0:
+                        count=count+3
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count+3
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count-10
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == 0:
+                        count=count-10
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c]:
+                        count=count-10
+            for c in range(0,3):
+                for r in range(0,6):
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == 0:
+                        count=count+3
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count-10
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == 0:
+                        count=count-10
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r][c+3]:
+                        count=count-10
+            for c in range(0,3):
+                for r in range(0,2):
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == 0:
+                        count=count+3
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count-10
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == 0:
+                        count=count-10
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r+3][c+3]:
+                        count=count-10
+            for c in range(0,3):
+                for r in range(3,ROW_SIZE):
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == piece and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == 0:
+                        count=count+3
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count+3
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count-10
+                    if board_copy[r][c] == opp and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == 0:
+                        count=count-10
+                    if board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == 0 and board_copy[r][c] == board_copy[r-3][c+3]:
+                        count=count-10
+            return count
 
     def _count_consecutives(self,board,number,piece):
         board_copy = board.board_copy()
@@ -84,104 +189,109 @@ class AIPlayer():
             for c in range(0,7):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == board_copy[r+3][c]:
-                        count=count+1
+                        count=count+40
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c] and board_copy[r][c] == board_copy[r+3][c]:
-                        count=count-1
+                        count=count-90
+                        
             for c in range(0,3):
                 for r in range(0,6):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == board_copy[r][c+3]:
-                        count=count+1
+                        count=count+40
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2] and board_copy[r][c] == board_copy[r][c+3]:
-                        count=count-1
+                        count=count-90
+                        
             for c in range(0,3):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == board_copy[r+3][c+3]:
-                        count=count+1
+                        count=count+40
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2] and board_copy[r][c] == board_copy[r+3][c+3]:
-                        count=count-1
+                        count=count-90
+                        
             for c in range(0,3):
                 for r in range(3,ROW_SIZE):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
-                        count=count+1
+                        count=count+40
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2] and board_copy[r][c] == board_copy[r-3][c+3]:
-                        count=count-1
+                        count=count-90     
             return count
+        
         if number == 3:
             for c in range(0,7):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c]:
-                        count=count+1
+                        count=count+10
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c] and board_copy[r][c] == board_copy[r+2][c]:
-                        count=count-1
+                        count=count-30
             for c in range(0,3):
                 for r in range(0,6):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2]:
-                        count=count+1
+                        count=count+10
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r][c+1] and board_copy[r][c] == board_copy[r][c+2]:
-                        count=count-1
+                        count=count-30
             for c in range(0,3):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2]:
-                        count=count+1
+                        count=count+10
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c+1] and board_copy[r][c] == board_copy[r+2][c+2]:
-                        count=count-1
+                        count=count-30
             for c in range(0,3):
                 for r in range(3,ROW_SIZE):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2]:
-                        count=count+1
+                        count=count+10
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r-1][c+1] and board_copy[r][c] == board_copy[r-2][c+2]:
-                        count=count-1
+                        count=count-30
             return count
         else:
             for c in range(0,7):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c]:
-                        count=count+1
+                        count=count+3
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c]:
-                        count=count-1
+                        count=count-10
             for c in range(0,3):
                 for r in range(0,6):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r][c+1]:
-                        count=count+1
+                        count=count+3
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r][c+1]:
-                        count=count-1
+                        count=count-10
             for c in range(0,3):
                 for r in range(0,2):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r+1][c+1]:
-                        count=count+1
+                        count=count+3
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r+1][c+1]:
-                        count=count-1
+                        count=count-10
             for c in range(0,3):
                 for r in range(3,ROW_SIZE):
                     if board_copy[r][c] == piece and board_copy[r][c] == board_copy[r-1][c+1]:
-                        count=count+1
+                        count=count+3
                     if board_copy[r][c] == opp and board_copy[r][c] == board_copy[r-1][c+1]:
-                        count=count-1
+                        count=count-10
             return count
                 
     def _deep_copy(self,board):
         board_copy = board.board_copy()
         return board_copy
     
-    def _minimax(self, board, depth, alpha, beta, maximizingPlayer):
+    def _minimax(self, count, board, depth, player_side, alpha, beta, maximizingPlayer):
+        if self._winning_move(board, player_side):
+            return (None, None,10000/count)
+        if self._winning_move(board, 3-player_side):
+            return (None, None, -10000/count)
         placements = self._select_best_move(board)
-        #is_terminal = self._is_terminal_node(board,placements)
-        if self._winning_move(board, self.side):
-            return (None, None,10000)
-        if self._winning_move(board, 3-self.side):
-            return (None, None, -10000)
         if len(placements) == 0:
             return (None, None, 0)
         if depth == 0:
-            return (None, None, self._count_consecutives(board, 4, self.side)*10000 + self._count_consecutives(board, 3, self.side)*100 + self._count_consecutives(board, 2, self.side))
+            #return (None, None, self._count_consecutives(board, 4, player_side)*10 + self._count_consecutives(board, 3, player_side)*5 + self._count_consecutives(board, 2, player_side)*2)
+            return (None, None, (self._count_consecutives(board, 4, player_side)*10000 +(self._count_consecutives(board, 3, player_side) + self._consecutives_with_spaces(board, 3, player_side))*100 + self._count_consecutives(board, 2, player_side) + self._consecutives_with_spaces(board, 2, player_side))/count)
+            #return (None,None, self._calcScore(board, player_side))
         if maximizingPlayer:
             value = -math.inf
             row_temp, column_temp = random.choice(placements)
             for (row,col) in placements:
                 b_copy = self._deep_copy(board)
-                b_copy[row][col] = self.side
+                b_copy[row][col] = player_side
                 b_copy = Board(b_copy)
-                new_score = self._minimax(b_copy,depth-1,alpha,beta,False)[2]
+                new_score = self._minimax(count+1, b_copy,depth-1,3-player_side,alpha,beta,False)[2]
                 if new_score > value:
                     value = new_score
                     row_temp = row
@@ -195,9 +305,9 @@ class AIPlayer():
             row_temp,column_temp = random.choice(placements)
             for (row,col) in placements:
                 b_copy = self._deep_copy(board)
-                b_copy[row][col] = self.side
+                b_copy[row][col] = player_side
                 b_copy = Board(b_copy)
-                new_score = self._minimax(b_copy,depth-1,alpha,beta,True)[2]
+                new_score = self._minimax(count+1, b_copy,depth-1,3-player_side,alpha,beta,True)[2]
                 if new_score<value:
                     value = new_score
                     row_temp = row
