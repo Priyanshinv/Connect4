@@ -40,7 +40,7 @@ class AIPlayer():
         if board.game_over():
             return
         row, col, value = self._minimax(1,board, 5, self.side,-math.inf, math.inf, True)
-        print(value)
+        #print(value)
         return board.move(row, col, self.side)
     
     def _calcScore(self,board,piece):
