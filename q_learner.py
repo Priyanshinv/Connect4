@@ -14,7 +14,7 @@ LOSS_REWARD = 0.0
 class QLearner:
 
 
-    GAME_NUM = 60
+    GAME_NUM = 80
 
     def __init__(self, alpha=.7, gamma=.9, initial_value=0.5, side=None):
         if not (0 < gamma <= 1):

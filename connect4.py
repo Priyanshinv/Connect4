@@ -18,7 +18,7 @@ from q_learner import QLearner
 PLAYER_X = 1
 PLAYER_O = 2
 
-def play(board, player1, player2, learn):
+def play(board, player1, player2, learn, qLearner_side):
     """ Player 1 -> X, X goes first
         player 2 -> O
     """
@@ -32,18 +32,21 @@ def play(board, player1, player2, learn):
         player2.move(board)
 
     if learn == True:
-        player1.learn(board)
+        if qLearner_side == 1:
+            player1.learn(board)
+        else:
+            player2.learn(board)
         #player2.learn(board)
 
     return board.game_result
 
 
 
-def battle(board, player1, player2, iter, learn=False, show_result=True):
+def battle(board, player1, player2, iter, qLearner_side, learn=False, show_result=True):
     p1_stats = [0, 0, 0] # draw, win, lose
     for i in range(0, iter):
         print('Round:',i)
-        result = play(board, player1, player2, learn)
+        result = play(board, player1, player2, learn, qLearner_side)
         p1_stats[result] += 1
         board.reset()
 
@@ -73,13 +76,14 @@ if __name__ == "__main__":
     # train: play NUM games against players who only make random moves
     board = Board(show_board=False, show_result=True)
     #battle(board, RandomPlayer(), RandomPlayer(), 10, learn=False, show_result=False)
-    battle(board, qlearner, AIPlayer(), NUM, learn=True, show_result=False)
+    battle(board, qlearner, AIPlayer(), NUM, 1, learn=True, show_result=False)
+    battle(board,AIPlayer(), qlearner, NUM, 2, learn=True, show_result=False)
     #qlearner.write_to_file()
     #print('Wrote to file')
     # test: play 1000 games against each opponent
     print('Playing QLearner against RandomPlayer for 10 times......')
-    q_rand = battle(board, qlearner, AIPlayer(), 10)
-    rand_q = battle(board, AIPlayer(), qlearner, 10)
+    q_rand = battle(board, qlearner, AIPlayer(), 10,1)
+    rand_q = battle(board, AIPlayer(), qlearner, 10,2)
     #print('Playing QLearner against SmartPlayer for 1000 times......')
     #q_smart = battle(board, qlearner, SmartPlayer(), 500)
     #smart_q = battle(board, SmartPlayer(), qlearner, 500)
