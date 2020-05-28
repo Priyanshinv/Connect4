@@ -34,8 +34,6 @@ def play(board, player1, player2, learn):
     if learn == True:
         player1.learn(board)
         #player2.learn(board)
-    player1.write_to_file()
-    print('Wrote to file')
 
     return board.game_result
 
@@ -76,11 +74,12 @@ if __name__ == "__main__":
     board = Board(show_board=False, show_result=True)
     #battle(board, RandomPlayer(), RandomPlayer(), 10, learn=False, show_result=False)
     battle(board, qlearner, AIPlayer(), NUM, learn=True, show_result=False)
-
+    #qlearner.write_to_file()
+    #print('Wrote to file')
     # test: play 1000 games against each opponent
     print('Playing QLearner against RandomPlayer for 10 times......')
-    q_rand = battle(board, qlearner, AIPlayer(), 5)
-    rand_q = battle(board, AIPlayer(), qlearner, 5)
+    q_rand = battle(board, qlearner, AIPlayer(), 10)
+    rand_q = battle(board, AIPlayer(), qlearner, 10)
     #print('Playing QLearner against SmartPlayer for 1000 times......')
     #q_smart = battle(board, qlearner, SmartPlayer(), 500)
     #smart_q = battle(board, SmartPlayer(), qlearner, 500)
